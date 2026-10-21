@@ -3,7 +3,7 @@
   "version": "0.2.2",
   "type": "module",
   "description": "CSL-JSON (csl-data.json, CSL 1.0.2) as the org's one bibliographic record format, seated in computer-data beside JSON Schema and CloudEvents: the item type vocabulary, name and date objects, DOI normalization, title folding, item admission, and the projections of OpenAlex, PubMed, and CrossRef records into it.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "exports": {
     ".": "./src/csl-json.mjs",
     "./scripts/project-openalex-work-csl.mjs": "./scripts/project-openalex-work-csl.mjs",
@@ -43,5 +43,9 @@
     "type": "git",
     "url": "git+https://github.com/red-cup-engineering/csl-json-services-section.git"
   },
-  "private": false
+  "private": false,
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/561-group/.github/blob/main/TIPS.md"
+  }
 }
