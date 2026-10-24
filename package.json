@@ -1,5 +1,5 @@
 {
-  "name": "@red-cup-engineering/csl-json-services-section",
+  "name": "@red-cup-engineering/csl-json-engineering-services-section",
   "version": "0.2.2",
   "type": "module",
   "description": "CSL-JSON (csl-data.json, CSL 1.0.2) as the org's one bibliographic record format, seated in computer-data beside JSON Schema and CloudEvents: the item type vocabulary, name and date objects, DOI normalization, title folding, item admission, and the projections of OpenAlex, PubMed, and CrossRef records into it.",
@@ -41,7 +41,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/red-cup-engineering/csl-json-services-section.git"
+    "url": "git+https://github.com/red-cup-engineering/csl-json-engineering-services-section.git"
   },
   "private": false,
   "funding": {
