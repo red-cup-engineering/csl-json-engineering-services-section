@@ -50,10 +50,10 @@ date builder. They are gone; this is the one.
   - **Identity**: `bareDoi` strips whatever prefix a DOI arrived with;
     `normalizeTitle` folds a title (NFKD, diacritics dropped, lowercased,
     non-alphanumeric runs collapsed) to the one comparison form the whole
-    house uses, so reference reconciliation, CrossRef verification, and
+    Group uses, so reference reconciliation, CrossRef verification, and
     screening dedup all mean the same thing by "same title".
   - **Admission**: `recognizeCslItem` / `admitCslItem` against the subset
-    of the csl-data contract the house needs downstream (an `id`, a
+    of the csl-data contract the Group needs downstream (an `id`, a
     `title`, an `issued` year, and at least one named author or editor),
     tolerating CSL's open vocabulary of further fields.
   - `cslString` and `stripUndefinedCslFields` are the two coercions the
