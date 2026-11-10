@@ -90,3 +90,7 @@ knows the formats.
 record, a PubMed `esummary` body, a CrossRef `/works/{doi}` body), so the
 projections are checked against production shapes rather than hand-written
 stand-ins.
+
+## Acceptance
+
+Run `npm test` for the source suite. See the [API reference](docs/API.md) and [runnable consumer example](examples/quickstart.test.mjs).

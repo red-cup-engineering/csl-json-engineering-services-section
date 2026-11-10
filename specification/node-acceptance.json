@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "basis": "Recognize CSL-JSON item types and admit author name carriers.",
+  "cases": [
+    {
+      "id": "CSL-TYPES-REFUSAL",
+      "role": "source",
+      "kind": "refusal",
+      "claim": "A CSL name lacking both a family and a literal is refused.",
+      "file": "test/csl-json.test.mjs",
+      "test": "nameToString throws on a name object carrying neither family nor literal"
+    },
+    {
+      "id": "CSL-TYPES-QUICKSTART",
+      "role": "consumer",
+      "kind": "example",
+      "claim": "An installed caller recognizes a journal article and refuses to classify an unknown type as CSL.",
+      "file": "examples/quickstart.test.mjs"
+    }
+  ]
+}
