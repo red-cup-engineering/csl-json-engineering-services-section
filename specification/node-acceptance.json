@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "basis": "CSL 1.0.2 item admission over strict JSON and SignCell byte custody.",
+  "cases": [
+    {
+      "id": "CSL-JSON-ITEM-REFUSAL",
+      "role": "source",
+      "kind": "refusal",
+      "claim": "Items missing the required bibliographic fields yield admission findings.",
+      "file": "test/csl-json.test.mjs",
+      "test": "recognizeCslItem refuses an item missing required fields"
+    },
+    {
+      "id": "CSL-JSON-SOURCE-QUICKSTART",
+      "role": "consumer",
+      "kind": "example",
+      "claim": "The installed codec witnesses a validated item list and refuses duplicate items and JSON keys.",
+      "file": "examples/quickstart.test.mjs"
+    }
+  ]
+}

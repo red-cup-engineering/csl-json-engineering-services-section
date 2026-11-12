@@ -1,6 +1,6 @@
 {
   "name": "@red-cup-engineering/csl-json-services-section",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "type": "module",
   "description": "CSL-JSON (csl-data.json, CSL 1.0.2) as the org's one bibliographic record format, seated in computer-data beside JSON Schema and CloudEvents: the item type vocabulary, name and date objects, DOI normalization, title folding, item admission, and the projections of OpenAlex, PubMed, and CrossRef records into it.",
   "license": "MIT",
@@ -12,7 +12,8 @@
     "./csl-references": "./src/csl-references.mjs",
     "./open-library": "./src/open-library.mjs",
     "./record-formatting": "./src/csl-record-formatting.mjs",
-    "./projection": "./src/csl-projection.mjs"
+    "./projection": "./src/csl-projection.mjs",
+    "./source-codec": "./src/source-codec.mjs"
   },
   "files": [
     "src/",
@@ -28,12 +29,13 @@
     "test:consumer": "node --test examples/quickstart.test.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24.2.0"
   },
   "dependencies": {
-    "@red-cup-engineering/json-services-section": "^0.4.0",
+    "@red-cup-engineering/json-services-section": "0.4.2",
     "@red-cup-engineering/json-schema-services-section": "^0.5.0",
-    "@red-cup-engineering/html-structural-projection-service": "^0.4.1"
+    "@red-cup-engineering/html-structural-projection-service": "^0.4.1",
+    "@red-cup-engineering/signcell": "0.17.5"
   },
   "keywords": [
     "csl-json",
