@@ -12,7 +12,7 @@ CSL-JSON (csl-data.json, CSL 1.0.2) as the org's one bibliographic record format
 CSL-JSON (`csl-data.json`, CSL 1.0.2) — the Citation Style Language's
 bibliographic record format — as the org's one citation record format.
 
-`cslJsonSourceCodec` reads and writes lists of house-admitted CSL items. It records the exact JSON byte address and the item list's interpretation, and refuses duplicate item IDs and duplicate JSON keys. See the [public API](docs/API.md).
+`cslJsonSourceCodec` reads and writes lists of house-admitted CSL items. It records the exact JSON byte address and the item list's interpretation, and refuses duplicate item IDs and duplicate JSON keys.
 
 ## Why it seats here
 
@@ -95,4 +95,4 @@ stand-ins.
 
 ## Acceptance
 
-Run `npm test` for the source suite. See the [API reference](docs/API.md) and [runnable consumer example](examples/quickstart.test.mjs).
+Run `npm test` for the source suite. See the [runnable consumer example](examples/quickstart.test.mjs).
