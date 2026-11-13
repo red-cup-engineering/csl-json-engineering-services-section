@@ -19,8 +19,8 @@ bibliographic record format — as the org's one citation record format.
 CSL-JSON is a record format profiled over JSON: data "pre-wire, pre-file".
 Under the org-layering ruling of 2026-09-04, such a format "gets its own
 engineering section under computer-data beside the format it profiles
-(CloudEvents beside JSON Schema under json-services-section)" — so this
-section sits in `json-services-section/services/` next to
+(CloudEvents beside JSON Schema under json-engineering-services-section)" — so this
+section sits in `json-engineering-services-section/services/` next to
 `cloudevents-services-section` and `json-schema-engineering-services-section`, the
 precedent that ruling names.
 
