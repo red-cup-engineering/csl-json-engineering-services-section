@@ -10,7 +10,7 @@
  * Pure data-in/data-out; no I/O, no network.
  */
 
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-services-section";
+import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engineering-services-section";
 
 /** CSL 1.0.2 item types. */
 export const CSL_TYPES = Object.freeze([

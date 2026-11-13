@@ -1,4 +1,4 @@
-import { admitCanonicalJson, canonicalJson, JSON_RESOURCE_ENVELOPE } from "@red-cup-engineering/json-services-section/canonical-json";
+import { admitCanonicalJson, canonicalJson, JSON_RESOURCE_ENVELOPE } from "@red-cup-engineering/json-engineering-services-section/canonical-json";
 import { defineSourceCodec, encodeUtf8Source } from "@red-cup-engineering/signcell/source-codec";
 import { admitCslItem } from "./csl-json.mjs";
 

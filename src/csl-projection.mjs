@@ -6,8 +6,8 @@
  * its projection, not a projection script.
  */
 
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-services-section";
-import { validateSchemaInstance } from "@red-cup-engineering/json-schema-services-section/validate-schema-instance";
+import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engineering-services-section";
+import { validateSchemaInstance } from "@red-cup-engineering/json-schema-engineering-services-section/validate-schema-instance";
 import projectionSchema from "./csl-projection.schema.json" with { type: "json" };
 import {
   bareDoi,

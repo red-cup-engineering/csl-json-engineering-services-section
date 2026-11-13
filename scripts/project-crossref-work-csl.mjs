@@ -9,7 +9,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-services-section";
+import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engineering-services-section";
 import {
   cslDateFromDateParts,
   cslNames,

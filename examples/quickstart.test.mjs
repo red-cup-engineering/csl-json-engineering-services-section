@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { isCslType } from "@red-cup-engineering/csl-json-services-section";
-import { cslJsonSourceCodec } from "@red-cup-engineering/csl-json-services-section/source-codec";
+import { isCslType } from "@red-cup-engineering/csl-json-engineering-services-section";
+import { cslJsonSourceCodec } from "@red-cup-engineering/csl-json-engineering-services-section/source-codec";
 
 test("CSL-TYPES-QUICKSTART", () => {
   assert.equal(isCslType("article-journal"), true);

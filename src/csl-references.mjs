@@ -18,7 +18,7 @@
  * typed concept graph and must not be flattened into one).
  */
 
-import { isObjectRecord } from "@red-cup-engineering/json-services-section";
+import { isObjectRecord } from "@red-cup-engineering/json-engineering-services-section";
 import {
   cslDate,
   cslDateFromDateParts,
