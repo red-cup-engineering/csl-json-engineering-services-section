@@ -21,7 +21,7 @@ Under the org-layering ruling of 2026-09-04, such a format "gets its own
 engineering section under computer-data beside the format it profiles
 (CloudEvents beside JSON Schema under json-services-section)" — so this
 section sits in `json-services-section/services/` next to
-`cloudevents-services-section` and `json-schema-services-section`, the
+`cloudevents-services-section` and `json-schema-engineering-services-section`, the
 precedent that ruling names.
 
 It seats here rather than under `computer-knowledge-systems-services-section`
