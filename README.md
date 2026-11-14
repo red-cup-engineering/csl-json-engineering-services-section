@@ -96,3 +96,11 @@ stand-ins.
 ## Acceptance
 
 Run `npm test` for the source suite. See the [runnable consumer example](examples/quickstart.test.mjs).
+
+## Native prerequisite receiving
+
+Original behavior and public consumer tests are shipped and declared as receiving tests.
+The native dependency lock uses genuine archive identities, not workspace links.
+This development cohort is a prerequisite preview: local authentic-archive
+qualification is not registry issuance or live activation, and does not clear
+held supplier integration or issuance gates.
