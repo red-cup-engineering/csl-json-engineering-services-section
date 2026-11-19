@@ -6,7 +6,7 @@
  */
 
 import {
-  admitCslItem,
+  validateCslItem,
   cslDate,
   cslString,
   nameFromString,
@@ -72,7 +72,7 @@ export function openLibraryBookToCsl({ isbn, edition, work = {}, authors = [], s
     URL: `${OPEN_LIBRARY_ORIGIN}/isbn/${encodeURIComponent(cleanIsbn)}`,
     note: sources.length > 0 ? `Open Library sources: ${sources.join(", ")}` : undefined,
   });
-  return admitCslItem(item);
+  return validateCslItem(item);
 }
 
 /** Project one Open Library search document into a CSL-JSON book candidate. */

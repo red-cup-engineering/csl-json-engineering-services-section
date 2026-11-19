@@ -23,7 +23,7 @@ import {
 export { projectionSchema };
 
 /** Admit a CSL projection: `{ ok: true, value }` or `{ ok: false, errors }`. */
-export function admitCslProjection(projection) {
+export function validateCslProjection(projection) {
   const { ok, errors } = validateSchemaInstance({ schema: projectionSchema, instance: projection });
   return ok ? Object.freeze({ ok, value: projection }) : Object.freeze({ ok, errors });
 }
@@ -114,8 +114,8 @@ function read(record, rule) {
  */
 export function projectCslItem(record, projection) {
   if (!isRecord(record)) throw new TypeError("projectCslItem requires a source record object");
-  const admitted = admitCslProjection(projection);
-  if (!admitted.ok) throw new TypeError(`projectCslItem: projection refused: ${admitted.errors.map((e) => `${e.pointer} ${e.message}`).join("; ")}`);
+  const validated = validateCslProjection(projection);
+  if (!validated.ok) throw new TypeError(`projectCslItem: projection refused: ${validated.errors.map((e) => `${e.pointer} ${e.message}`).join("; ")}`);
   const item = Object.fromEntries(Object.entries(projection).map(([variable, rule]) => [variable, read(record, rule)]));
   // CSL requires a type; a record whose own type words alias to none is a `document`.
   if ("type" in projection && item.type === undefined) item.type = toCslType(undefined, {});
