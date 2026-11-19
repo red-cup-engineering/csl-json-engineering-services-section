@@ -1,0 +1,53 @@
+{
+  "name": "@red-cup-engineering/csl-json-engineering-services-section",
+  "version": "0.3.5-dev.0",
+  "type": "module",
+  "description": "CSL-JSON (csl-data.json, CSL 1.0.2) as the org's one bibliographic record format, seated in computer-data beside JSON Schema and CloudEvents: the item type vocabulary, name and date objects, DOI normalization, title folding, item admission, and the projections of OpenAlex, PubMed, and CrossRef records into it.",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/csl-json.mjs",
+    "./scripts/project-openalex-work-csl.mjs": "./scripts/project-openalex-work-csl.mjs",
+    "./scripts/project-pubmed-summary-csl.mjs": "./scripts/project-pubmed-summary-csl.mjs",
+    "./scripts/project-crossref-work-csl.mjs": "./scripts/project-crossref-work-csl.mjs",
+    "./csl-references": "./src/csl-references.mjs",
+    "./open-library": "./src/open-library.mjs",
+    "./record-formatting": "./src/csl-record-formatting.mjs",
+    "./projection": "./src/csl-projection.mjs",
+    "./source-codec": "./src/source-codec.mjs"
+  },
+  "files": [
+    "src/",
+    "scripts/",
+    "README.md"
+  ],
+  "scripts": {
+    "check": "node --check src/*.mjs && node --check scripts/project-openalex-work-csl.mjs && node --check scripts/project-pubmed-summary-csl.mjs && node --check scripts/project-crossref-work-csl.mjs",
+    "verify": "npm run check"
+  },
+  "engines": {
+    "node": ">=24.2.0"
+  },
+  "dependencies": {
+    "@red-cup-engineering/json-engine": "^0.5.0",
+    "@red-cup-engineering/json-schema-engineering-services-section": "^0.5.7",
+    "@red-cup-engineering/html-engine": "^0.1.0",
+    "@red-cup-engineering/signcell": "^0.17.5",
+    "@red-cup-engineering/typed-content": "0.1.0-dev.0"
+  },
+  "keywords": [
+    "csl-json",
+    "csl",
+    "bibliography",
+    "citation",
+    "json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/red-cup-engineering/csl-json-engineering-services-section.git"
+  },
+  "private": false,
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/561-group/.github/blob/main/TIPS.md"
+  }
+}
