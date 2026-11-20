@@ -7,24 +7,7 @@ import { escapeHtml } from '@red-cup-engineering/html-engine/string-rendering';
 import { admitCslItem, cslDate, issuedYear, nameFromString, nameToString } from './csl-json.mjs';
 import { decodeReferencesValue } from './csl-references.mjs';
 
-/**
- * Split a citation bracket's interior into its component items. Each item is
- * "@key" optionally followed by ", <locator>"; several items separate on ";".
- *
- * @param {string} text - the bracket interior, e.g. "@a, p. 12; @b".
- * @returns {Array<{key: string, locator: (string|null)}>} parsed items, in
- *   the order they appear; malformed items are dropped.
- */
-export function parseCitationItems(text) {
-  return text.split(';')
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((part) => {
-      const m = part.match(/^@([A-Za-z][\w-]*)\s*(?:,\s*(.+))?$/u);
-      return m ? { key: m[1], locator: m[2] ? m[2].trim() : null } : null;
-    })
-    .filter((item) => item !== null);
-}
+export { parseCitationItems } from './csl-references.mjs';
 
 function personName(person) {
   if (!person || typeof person !== 'object') return '';
@@ -89,7 +72,7 @@ export function formatCitationLabel(reference, locator) {
  */
 export function formatReferenceEntry(reference) {
   const authorsHtml = escapeHtml(formatAuthorsFull(reference?.author) || 'Unknown');
-  const year = referenceYear(reference);
+  const year = escapeHtml(referenceYear(reference));
   const title = escapeHtml(reference?.title || 'Untitled');
   const publisher = reference?.publisher ? escapeHtml(reference.publisher) : '';
   const container = reference?.['container-title'] ? escapeHtml(reference['container-title']) : '';
@@ -119,6 +102,17 @@ export function formatReferenceEntry(reference) {
       return `${authorsHtml}. <cite>${title}</cite>. ${venue}, ${year}.`;
     }
   }
+}
+
+/** The bibliography targeted by inline citation links, in order of first citation. */
+export function formatReferenceList(citations) {
+  const entries = citations.map(({ key, reference }) =>
+    `<li id="ref-${escapeHtml(key)}">${formatReferenceEntry(reference)}</li>`
+  );
+  return `<section class="reference-list" aria-label="References">
+  <h2>References</h2>
+  <ul>${entries.join('')}</ul>
+</section>`;
 }
 
 /**

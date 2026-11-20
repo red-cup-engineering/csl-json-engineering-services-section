@@ -62,10 +62,13 @@ date builder. They are gone; this is the one.
     tolerating CSL's open vocabulary of further fields.
   - `cslString` and `stripUndefinedCslFields` are the two coercions the
     projections share.
-- `src/csl-record-formatting.mjs` — citation labels, reference-entry HTML,
-  schema.org citation projection, house-record/CSL projection, and citekey
-  minting. Markdown and bibliography consume these functions rather than
-  carrying renderers or a second CSL adapter.
+- `src/csl-references.mjs` provides `indexCslReferences` for keyed bibliographies
+  and CSL lists. Each distinct identifier in a list names one source.
+  `parseCitationItems` reads grouped citations and their page locators.
+- `src/csl-record-formatting.mjs` formats author-year labels, bibliography entries
+  and reference lists. `formatReferenceList` uses citation order and supplies
+  the HTML targets for inline links. This module also produces schema.org
+  citation records and generates author-year citation keys.
 - `src/csl-projection.mjs` — `projectCslItem(record, projection)`: any
   source record to a CSL-JSON item by a *CSL projection*, data admitted
   against `src/csl-projection.schema.json` that names, per CSL variable, the

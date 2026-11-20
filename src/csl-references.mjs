@@ -45,7 +45,7 @@ const EMPTY = Object.freeze({ dialect: "none", items: Object.freeze([]) });
 const EMPTY_PRESENT = Object.freeze({ dialect: "empty", items: Object.freeze([]) });
 
 const HTTP_URL_PATTERN = /^https?:\/\/[^\s<>"']+$/iu;
-const CITATION_PATTERN = /\[(?:cite:)?@([A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*(?:\s*;\s*@[A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*)*)\]/gu;
+
 
 const isRecord = isObjectRecord;
 
@@ -75,6 +75,21 @@ export function decodeReferencesValue(value) {
       : Object.freeze({ dialect: "citekey-map", items });
   }
   return Object.freeze({ dialect: "mixed", items: Object.freeze([]) });
+}
+
+/**
+ * Index a document's bibliography by citation key. Existing keyed records
+ * keep their original fields. In a CSL sequence, a missing or duplicated id
+ * cannot identify a single source, so it is unavailable for citation.
+ */
+export function indexCslReferences(value) {
+  if (isRecord(value)) return value;
+  const index = new Map();
+  for (const item of decodeReferencesValue(value).items) {
+    const id = str(item.id);
+    if (id !== undefined) index.set(id, index.has(id) ? undefined : item);
+  }
+  return Object.fromEntries([...index].filter(([, item]) => item !== undefined));
 }
 
 // — CSL vocabulary —
@@ -289,12 +304,31 @@ export function withFrontmatterReferences(frontmatter, items) {
 
 // — body citations —
 
+/**
+ * Split a citation bracket's interior into its component items. Each item is
+ * "@key" optionally followed by ", <locator>"; several items separate on ";".
+ *
+ * @param {string} text - the bracket interior, e.g. "@a, p. 12; @b".
+ * @returns {Array<{key: string, locator: (string|null)}>} parsed items, in
+ *   the order they appear; malformed items are dropped.
+ */
+export function parseCitationItems(text) {
+  return text.replace(/^cite:(?=@)/u, '').split(';')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const m = part.match(/^@([A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*)\s*(?:,\s*(.+))?$/u);
+      return m ? { key: m[1], locator: m[2] ? m[2].trim() : null } : null;
+    })
+    .filter((item) => item !== null);
+}
+
 /** Every reference id cited in a markdown body via `[@id]` or `[cite:@id]`
  *  (semicolon groups included), in order of appearance. */
 export function citedReferenceIds(markdown) {
   const ids = [];
-  for (const match of markdown.matchAll(CITATION_PATTERN)) {
-    for (const id of (match[1] ?? "").split(/\s*;\s*@/u).map((key) => key.trim()).filter(Boolean)) ids.push(id);
+  for (const match of markdown.matchAll(/\[((?:cite:)?@[^\[\]\r\n]+)\](?!\()/gu)) {
+    for (const item of parseCitationItems(match[1])) ids.push(item.key);
   }
   return Object.freeze(ids);
 }
