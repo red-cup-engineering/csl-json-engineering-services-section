@@ -4,7 +4,7 @@
 // article-journal, report, book, chapter, and webpage CSL types.
 
 import { escapeHtml } from '@red-cup-engineering/html-engine/string-rendering';
-import { validateCslItem, cslDate, issuedYear, nameFromString, nameToString } from './csl-json.mjs';
+import { admitCslItem, cslDate, issuedYear, nameFromString, nameToString } from './csl-json.mjs';
 import { decodeReferencesValue } from './csl-references.mjs';
 
 /**
@@ -186,10 +186,10 @@ function identityReferenceEntry(_citekey, entry) {
   return Object.freeze({ ...entry });
 }
 
-function referenceValidation(options) {
-  const validate = options.admitReferenceEntry ?? identityReferenceEntry;
-  if (typeof validate !== 'function') throw new TypeError('admitReferenceEntry must be a function');
-  return validate;
+function referenceAdmission(options) {
+  const admit = options.admitReferenceEntry ?? identityReferenceEntry;
+  if (typeof admit !== 'function') throw new TypeError('admitReferenceEntry must be a function');
+  return admit;
 }
 
 /** Project one CSL-JSON item to the house depth-1 reference-record shape. */
@@ -213,33 +213,33 @@ export function fromCslItem(item, options = {}) {
   const citekey = hasHouseCitekeyId ? item.id : makeCitekey(namesForKey, yearForKey, taken);
   taken.add(citekey);
 
-  const validated = validateCslItem({ ...item, id: citekey });
-  const names = validated.author ?? validated.editor ?? [];
-  const entry = { authors: names.map(nameToString), title: validated.title, year: issuedYear(validated.issued) };
-  if (typeof validated['container-title'] === 'string' && validated['container-title'].trim() !== '') entry.publication = validated['container-title'];
-  if (typeof validated.publisher === 'string' && validated.publisher.trim() !== '') entry.publisher = validated.publisher;
-  if (typeof validated.DOI === 'string' && validated.DOI.trim() !== '') entry.doi = validated.DOI;
-  if (typeof validated.URL === 'string' && validated.URL.trim() !== '') entry.url = validated.URL;
-  if (typeof validated.note === 'string' && validated.note.trim() !== '') entry.note = validated.note;
+  const admitted = admitCslItem({ ...item, id: citekey });
+  const names = admitted.author ?? admitted.editor ?? [];
+  const entry = { authors: names.map(nameToString), title: admitted.title, year: issuedYear(admitted.issued) };
+  if (typeof admitted['container-title'] === 'string' && admitted['container-title'].trim() !== '') entry.publication = admitted['container-title'];
+  if (typeof admitted.publisher === 'string' && admitted.publisher.trim() !== '') entry.publisher = admitted.publisher;
+  if (typeof admitted.DOI === 'string' && admitted.DOI.trim() !== '') entry.doi = admitted.DOI;
+  if (typeof admitted.URL === 'string' && admitted.URL.trim() !== '') entry.url = admitted.URL;
+  if (typeof admitted.note === 'string' && admitted.note.trim() !== '') entry.note = admitted.note;
   if (entry.note === undefined && sourceId !== null && sourceId !== entry.doi && sourceId !== entry.url) entry.note = `source id: ${sourceId}`;
-  return Object.freeze({ citekey, entry: referenceValidation(options)(citekey, entry) });
+  return Object.freeze({ citekey, entry: referenceAdmission(options)(citekey, entry) });
 }
 
 /** Project one admitted house depth-1 reference record to CSL-JSON. */
 export function toCslItem(citekey, entry, options = {}) {
-  const validated = referenceValidation(options)(citekey, entry);
-  const type = validated.publication !== undefined ? 'article-journal' : validated.publisher !== undefined ? 'book' : 'document';
+  const admitted = referenceAdmission(options)(citekey, entry);
+  const type = admitted.publication !== undefined ? 'article-journal' : admitted.publisher !== undefined ? 'book' : 'document';
   const item = {
     id: citekey,
     type,
-    author: validated.authors.map(nameFromString),
-    title: validated.title,
-    issued: cslDate(validated.year),
+    author: admitted.authors.map(nameFromString),
+    title: admitted.title,
+    issued: cslDate(admitted.year),
   };
-  if (validated.publication !== undefined) item['container-title'] = validated.publication;
-  if (validated.publisher !== undefined) item.publisher = validated.publisher;
-  if (validated.doi !== undefined) item.DOI = validated.doi;
-  if (validated.url !== undefined) item.URL = validated.url;
-  if (validated.note !== undefined) item.note = validated.note;
+  if (admitted.publication !== undefined) item['container-title'] = admitted.publication;
+  if (admitted.publisher !== undefined) item.publisher = admitted.publisher;
+  if (admitted.doi !== undefined) item.DOI = admitted.doi;
+  if (admitted.url !== undefined) item.URL = admitted.url;
+  if (admitted.note !== undefined) item.note = admitted.note;
   return Object.freeze(item);
 }

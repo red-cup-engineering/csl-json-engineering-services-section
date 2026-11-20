@@ -1,15 +1,15 @@
 import { admitCanonicalJson, canonicalJson, JSON_RESOURCE_ENVELOPE } from "@red-cup-engineering/json-engine/canonical-json";
 import { defineSourceCodec, encodeUtf8Source } from "@red-cup-engineering/typed-content/source-codec";
-import { validateCslItem } from "./csl-json.mjs";
+import { admitCslItem } from "./csl-json.mjs";
 
-function validateItems(value) {
+function admitItems(value) {
   if (!Array.isArray(value)) throw new TypeError("CSL-JSON bibliography requires an array of items");
   const ids = new Set();
   return value.map(item => {
-    const validated = validateCslItem(item);
-    if (ids.has(validated.id)) throw new TypeError(`duplicate CSL item id ${JSON.stringify(validated.id)}`);
-    ids.add(validated.id);
-    return validated;
+    const admitted = admitCslItem(item);
+    if (ids.has(admitted.id)) throw new TypeError(`duplicate CSL item id ${JSON.stringify(admitted.id)}`);
+    ids.add(admitted.id);
+    return admitted;
   });
 }
 
@@ -19,6 +19,6 @@ export const cslJsonSourceCodec = defineSourceCodec({
   mediaType: "application/json",
   maxBytes: JSON_RESOURCE_ENVELOPE.maxSourceBytes,
   valueIdentity: "exact",
-  decode: bytes => validateItems(admitCanonicalJson(bytes, JSON_RESOURCE_ENVELOPE).value),
-  encode: value => encodeUtf8Source(canonicalJson(validateItems(value), JSON_RESOURCE_ENVELOPE)),
+  decode: bytes => admitItems(admitCanonicalJson(bytes, JSON_RESOURCE_ENVELOPE).value),
+  encode: value => encodeUtf8Source(canonicalJson(admitItems(value), JSON_RESOURCE_ENVELOPE)),
 });

@@ -340,7 +340,7 @@ export function recognizeCslItem(item) {
  * @returns {object} the frozen, admitted CSL-JSON item.
  * @throws {Error} carrying `.findings` when the item is refused.
  */
-export function validateCslItem(item) {
+export function admitCslItem(item) {
   const recognized = recognizeCslItem(item);
   if (!recognized.admitted) {
     const error = new Error(`CSL-JSON item refused: ${recognized.findings.map(({ path, message }) => `${path}: ${message}`).join("; ")}`);
