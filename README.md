@@ -7,61 +7,17 @@
 [![Tips welcome](https://img.shields.io/badge/tips-welcome-d4a017)](https://github.com/561-group/.github/blob/main/TIPS.md)
 <!-- 561-group-standards:badges:end -->
 
-CSL-JSON (csl-data.json, CSL 1.0.2) as the org's one bibliographic record format, seated in computer-data beside JSON Schema and CloudEvents: the item type vocabulary, name and date objects, DOI normalization, title folding, item admission, and the projections of OpenAlex, PubMed, and CrossRef records into it.
+This package reads, validates and formats bibliography records in Citation Style Language JSON (CSL 1.0.2). Markdown rooms, publications and bibliography tools use the same rules for names, dates, citation keys and author-year labels.
 
-CSL-JSON (`csl-data.json`, CSL 1.0.2) — the Citation Style Language's
-bibliographic record format — as the org's one citation record format.
+## Reading and writing records
 
-`cslJsonSourceCodec` reads and writes lists of house-admitted CSL items. It records the exact JSON byte address and the item list's interpretation, and refuses duplicate item IDs and duplicate JSON keys.
+`cslJsonSourceCodec` reads and writes a JSON array of records. The returned reading identifies both the source bytes and the validated item list. The codec rejects duplicate JSON keys and repeated item identifiers.
 
-## Why it seats here
+`recognizeCslItem` reports validation errors by field. `admitCslItem` returns a validated record or throws. The Group’s publication format requires an identifier, a CSL type, a title, a publication year and an author or editor. Additional CSL fields are preserved.
 
-CSL-JSON is a record format profiled over JSON: data "pre-wire, pre-file".
-Under the org-layering ruling of 2026-09-04, such a format "gets its own
-engineering section under computer-data beside the format it profiles
-(CloudEvents beside JSON Schema under json-engineering-services-section)" — so this
-section sits in `json-engineering-services-section/services/` next to
-`cloudevents-services-section` and `json-schema-engineering-services-section`, the
-precedent that ruling names.
+## Package responsibilities
 
-It seats here rather than under `computer-knowledge-systems-services-section`
-because computer-data is upstream of computer-systems: a knowledge system
-(bibliography, scholarly retrieval, a citation renderer) consumes this
-codec, and must not grow its own copy. Two such copies existed before this
-section — `bibliography-engineering-services-section/src/csl-json.mjs` and
-`scholarly-literature-services-section/src/scholarly-literature.mjs`, each
-with its own CSL type vocabulary, its own name constructor, and its own
-date builder. They are gone; this is the one.
-
-## What lives here
-
-- `src/csl-json.mjs` — the algebra.
-  - **Vocabulary**: `CSL_TYPES` (the complete CSL 1.0.2 item type list),
-    `isCslType`, and `toCslType(rawType, aliases)`, which resolves a
-    source's own type word through that source's alias table *first*, so
-    OpenAlex's `"article"` (meaning a journal article) reads as OpenAlex
-    means it rather than as the CSL type that happens to share its
-    spelling; an unaliased word that is already a CSL type passes through,
-    and anything else falls back to `"document"`.
-  - **Names**: `cslName({literal, family, given})` builds a name from
-    already-separated parts; `nameFromString` parses a display string
-    ("Family, Given", institutional phrases, single tokens);
-    `nameToString` is its inverse; `cslNames` lifts a heterogeneous list;
-    `isValidCslName` is the predicate.
-  - **Dates**: `cslDate(year, month?, day?)` is the constructor; the
-    parsers `cslDateFromIsoString`, `cslDateFromPubmedString`, and
-    `cslDateFromDateParts` build on it; `issuedYear` reads one back.
-  - **Identity**: `bareDoi` strips whatever prefix a DOI arrived with;
-    `normalizeTitle` folds a title (NFKD, diacritics dropped, lowercased,
-    non-alphanumeric runs collapsed) to the one comparison form the whole
-    Group uses, so reference reconciliation, CrossRef verification, and
-    screening dedup all mean the same thing by "same title".
-  - **Admission**: `recognizeCslItem` / `admitCslItem` against the subset
-    of the csl-data contract the Group needs downstream (an `id`, a
-    `title`, an `issued` year, and at least one named author or editor),
-    tolerating CSL's open vocabulary of further fields.
-  - `cslString` and `stripUndefinedCslFields` are the two coercions the
-    projections share.
+- `src/csl-json.mjs` defines the item types and handles names, dates, DOI normalization and title matching. Source-specific type aliases take precedence when converting external records.
 - `src/csl-references.mjs` provides `indexCslReferences` for keyed bibliographies
   and CSL lists. Each distinct identifier in a list names one source.
   `parseCitationItems` reads grouped citations and their page locators.
@@ -69,41 +25,11 @@ date builder. They are gone; this is the one.
   and reference lists. `formatReferenceList` uses citation order and supplies
   the HTML targets for inline links. This module also produces schema.org
   citation records and generates author-year citation keys.
-- `src/csl-projection.mjs` — `projectCslItem(record, projection)`: any
-  source record to a CSL-JSON item by a *CSL projection*, data admitted
-  against `src/csl-projection.schema.json` that names, per CSL variable, the
-  path it is read from and the CSL value kind it becomes (text, title, names,
-  date, year, doi, type with the source's own alias table, or a joined list),
-  with constants, `{path}` templates and first-of fallbacks. A new
-  bibliographic source is a projection, not a script.
-- `scripts/project-openalex-work-csl.mjs`,
-  `scripts/project-pubmed-summary-csl.mjs`,
-  `scripts/project-crossref-work-csl.mjs` — one bibliographic source's
-  native record shape to a CSL-JSON item, each also runnable as a filter
-  (record JSON on stdin, CSL-JSON item on stdout). Each carries only its
-  own source's type alias table; the mapping rules are the shared algebra
-  above.
+- `src/csl-projection.mjs` maps fields from a source record to CSL variables. Each mapping is checked against the bundled JSON Schema. It can read nested fields, set a constant or select the first available value.
+- The three scripts under `scripts/` convert OpenAlex, PubMed and CrossRef records. Each reads one JSON record from standard input and writes the converted item to standard output.
 
-The network clients that *fetch* those records are not here — retrieving a
-work from OpenAlex, PubMed, or CrossRef is knowledge-system work and lives
-in `bibliography-engineering-services-section/scripts/`. This section only
-knows the formats.
+The bibliography service owns requests to external catalogs. This package owns the record format and conversion code.
 
-## Fixtures
+## Verification
 
-`test/fixtures/` holds real recorded API responses (an OpenAlex `/works`
-record, a PubMed `esummary` body, a CrossRef `/works/{doi}` body), so the
-projections are checked against production shapes rather than hand-written
-stand-ins.
-
-## Acceptance
-
-Run `npm test` for the source suite. See the [runnable consumer example](examples/quickstart.test.mjs).
-
-## Native prerequisite receiving
-
-Original behavior and public consumer tests are shipped and declared as receiving tests.
-The native dependency lock uses genuine archive identities, not workspace links.
-This development cohort is a prerequisite preview: local authentic-archive
-qualification is not registry issuance or live activation, and does not clear
-held supplier integration or issuance gates.
+Run `npm test` in an installed package. The [source and consumer tests](test/source-codec.test.mjs) exercise validation, canonical bytes, grouped citations, page locators, source-field mappings and reference links.

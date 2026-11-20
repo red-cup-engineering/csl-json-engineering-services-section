@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { cslJsonSourceCodec } from '../src/source-codec.mjs';
+import { recognizeCslItem } from '@red-cup-engineering/csl-json-engineering-services-section';
+import { cslJsonSourceCodec } from '@red-cup-engineering/csl-json-engineering-services-section/source-codec';
 
 test('published bibliography bytes retain their source and interpretation, and duplicate IDs refuse', () => {
   const guide = { id: 'guide', type: 'book', title: 'The Garden', author: [{ family: 'Birch' }], issued: { 'date-parts': [[2020]] } };
@@ -10,6 +11,8 @@ test('published bibliography bytes retain their source and interpretation, and d
   assert.equal(reading.claim.object, 'ni:///sha-256;coCHtl1bZUgairh0Hplhp2PBoma2ZCwtdNj2FE2YKOA');
   assert.deepEqual(cslJsonSourceCodec.read(bytes), reading);
   assert.throws(() => cslJsonSourceCodec.write([guide, guide]), /duplicate CSL item id/);
+  const duplicateKeys = new TextEncoder().encode('[{"id":"first","id":"second"}]');
+  assert.throws(() => cslJsonSourceCodec.read(duplicateKeys), /duplicate|repeated/i);
 });
 
 test('citation lookup and formatting preserve numeric keys, grouped sources and page locators', async () => {
@@ -39,4 +42,11 @@ test('a citation targets one identified bibliography item and the reference list
     { id: 'ambiguous', title: 'First' }, { id: 'ambiguous', title: 'Second' }]);
   assert.deepEqual(Object.keys(references).sort(), ['24', 'tide&ferry']);
   assert.match(formatReferenceList([{ key: book.id, reference: references[book.id] }]), /<li id="ref-tide&amp;ferry">Unknown\. <cite>Tides &amp; Ferries<\/cite>/);
+});
+
+
+test('recognizeCslItem reports missing bibliographic fields', () => {
+  const result = recognizeCslItem({ type: 'book' });
+  assert.equal(result.admitted, false);
+  assert.deepEqual(result.findings.map(finding => finding.path), ['.id', '.title', '.issued', '']);
 });
