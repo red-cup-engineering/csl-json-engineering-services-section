@@ -1,3 +1,4 @@
+
 import * as values from "@red-cup-engineering/signcell/values";
 /**
  * codecs/text/csl — the bibliographic layer of markdown-vault frontmatter, normalized to
@@ -48,7 +49,7 @@ const EMPTY_PRESENT = Object.freeze({ dialect: "empty", items: Object.freeze([])
 const HTTP_URL_PATTERN = /^https?:\/\/[^\s<>"']+$/iu;
 const CITATION_PATTERN = /\[(?:cite:)?@([A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*(?:\s*;\s*@[A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*)*)\]/gu;
 
-const isRecord = values.isRecord;
+
 
 const str = cslString;
 
@@ -56,7 +57,7 @@ const str = cslString;
 
 /** Decode a frontmatter record's `references` key to normalized CSL items. */
 export function referencesOfFrontmatter(frontmatter) {
-  if (!isRecord(frontmatter)) throw new TypeError("csl: frontmatter must be a record");
+  if (!values.isRecord(frontmatter)) throw new TypeError("csl: frontmatter must be a record");
   if (!("references" in frontmatter)) return EMPTY;
   return decodeReferencesValue(frontmatter["references"]);
 }
@@ -68,7 +69,7 @@ export function decodeReferencesValue(value) {
     const items = normalizeCslSequence(value);
     return items.length === 0 ? EMPTY_PRESENT : Object.freeze({ dialect: "csl", items });
   }
-  if (isRecord(value)) {
+  if (values.isRecord(value)) {
     const items = normalizeCitekeyMap(value);
     if (Object.keys(value).length === 0) return EMPTY_PRESENT;
     return items.length === 0
@@ -109,7 +110,7 @@ function toCslDate(value) {
   }
   if (Array.isArray(value) && value.length > 0) {
     const first = value[0];
-    if (isRecord(first)) {
+    if (values.isRecord(first)) {
       const parts = ["year", "month", "day"]
         .map((key) => first[key])
         .filter((part) => typeof part === "number");
@@ -117,7 +118,7 @@ function toCslDate(value) {
     }
     if (typeof first === "number") return cslDate(first);
   }
-  if (isRecord(value) && Array.isArray(value["date-parts"])) {
+  if (values.isRecord(value) && Array.isArray(value["date-parts"])) {
     const tuples = (value["date-parts"])
       .map((tuple) => Array.isArray(tuple) ? tuple.filter((part) => typeof part === "number") : [])
       .filter((tuple) => tuple.length > 0);
@@ -139,7 +140,7 @@ function toCslNames(value) {
 function normalizeCslSequence(value) {
   const items = [];
   for (const entry of value) {
-    if (!isRecord(entry)) continue;
+    if (!values.isRecord(entry)) continue;
     const item = { ...entry };
     item["type"] = toCslType(entry["type"]);
     const id = str(entry["id"]);
@@ -165,7 +166,7 @@ function normalizeCslSequence(value) {
 function normalizeCitekeyMap(value) {
   const items = [];
   for (const [citekey, entry] of Object.entries(value)) {
-    if (!isRecord(entry)) continue;
+    if (!values.isRecord(entry)) continue;
     const item = { ...entry };
     for (const field of CITEKEY_RENAMED) delete item[field];
     const explicitType = str(entry["type"]) ?? str(entry["class"]);
@@ -234,7 +235,7 @@ export function referencesFromSourceUrls(sourceUrls) {
 export function normalizeCslReferenceRecords(rawReferences) {
   if (!Array.isArray(rawReferences)) return Object.freeze([]);
   return Object.freeze(rawReferences.flatMap((rawReference, index) => {
-    if (!isRecord(rawReference)) return [];
+    if (!values.isRecord(rawReference)) return [];
     const url = str(rawReference["URL"]) ?? str(rawReference["url"]);
     const id = str(rawReference["id"]) ?? str(rawReference["key"]) ?? str(rawReference["citation-key"]) ?? str(rawReference["citation_key"])
       ?? (url === undefined ? `reference${index + 1}` : referenceIdFromUrl(url, index));
