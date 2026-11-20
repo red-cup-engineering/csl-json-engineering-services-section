@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { isRecord } from "@red-cup-engineering/signcell/values";
 /**
  * @module project-pubmed-summary-csl
  * The transformation: one PubMed E-utilities `esummary` result record (one
@@ -7,7 +8,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engine";
+
 import {
   cslDateFromPubmedString,
   cslNames,

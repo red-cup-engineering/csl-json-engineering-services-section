@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { isRecord } from "@red-cup-engineering/signcell/values";
 /**
  * @module project-crossref-work-csl
  * The transformation: one CrossRef work object (the `message` field of a
@@ -9,7 +10,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engine";
+
 import {
   cslDateFromDateParts,
   cslNames,

@@ -1,3 +1,4 @@
+import { isRecord } from "@red-cup-engineering/signcell/values";
 /**
  * @module csl-projection
  * One source record's JSON to a CSL-JSON item by a CSL projection: data
@@ -6,7 +7,7 @@
  * its projection, not a projection script.
  */
 
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engine";
+
 import { validateSchemaInstance } from "@red-cup-engineering/json-schema-engineering-services-section/validate-schema-instance";
 import projectionSchema from "./csl-projection.schema.json" with { type: "json" };
 import {

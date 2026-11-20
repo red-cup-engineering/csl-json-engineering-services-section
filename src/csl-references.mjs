@@ -1,3 +1,4 @@
+import * as values from "@red-cup-engineering/signcell/values";
 /**
  * codecs/text/csl — the bibliographic layer of markdown-vault frontmatter, normalized to
  * CSL-JSON (citeproc).
@@ -18,7 +19,7 @@
  * typed concept graph and must not be flattened into one).
  */
 
-import { isObjectRecord } from "@red-cup-engineering/json-engine";
+
 import {
   cslDate,
   cslDateFromDateParts,
@@ -47,7 +48,7 @@ const EMPTY_PRESENT = Object.freeze({ dialect: "empty", items: Object.freeze([])
 const HTTP_URL_PATTERN = /^https?:\/\/[^\s<>"']+$/iu;
 const CITATION_PATTERN = /\[(?:cite:)?@([A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*(?:\s*;\s*@[A-Za-z0-9][A-Za-z0-9_:.#/$%&+?~=-]*)*)\]/gu;
 
-const isRecord = isObjectRecord;
+const isRecord = values.isRecord;
 
 const str = cslString;
 

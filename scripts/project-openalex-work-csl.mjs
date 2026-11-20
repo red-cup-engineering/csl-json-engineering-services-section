@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { isRecord } from "@red-cup-engineering/signcell/values";
 /**
  * @module project-openalex-work-csl
  * The transformation: one OpenAlex work object (from a `/works` search
@@ -7,9 +8,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import {
-  isObjectRecord as isRecord,
-} from "@red-cup-engineering/json-engine";
+
 import {
   bareDoi,
   cslDate,

@@ -1,3 +1,4 @@
+import { isRecord } from "@red-cup-engineering/signcell/values";
 /**
  * @module csl-json
  * The org's one CSL-JSON (`csl-data.json`, CSL 1.0.2) algebra: the item type
@@ -10,7 +11,7 @@
  * Pure data-in/data-out; no I/O, no network.
  */
 
-import { isObjectRecord as isRecord } from "@red-cup-engineering/json-engine";
+
 
 /** CSL 1.0.2 item types. */
 export const CSL_TYPES = Object.freeze([
